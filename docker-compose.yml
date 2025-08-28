@@ -1,0 +1,25 @@
+services:
+  mysql:
+    image: mysql:8.1
+    container_name: laravel-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin-mysql
+      MYSQL_DATABASE: todo_backend
+    volumes:
+      - mysql-data:/var/lib/mysql
+  php:
+    build: .           # Build PHP image from Dockerfile
+    container_name: todo-backend-php
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html               # Mount your Laravel project
+    ports:
+      - "8000:8000"                   # Expose port 8000 for Laravel
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:
+
