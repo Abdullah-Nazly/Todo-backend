@@ -38,7 +38,7 @@ Before you begin, ensure you have the following installed on your system:
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-backend-repo-url>
+git clone https://github.com/Abdullah-Nazly/Todo-backend.git
 cd Todo-backend
 ```
 
