@@ -41,7 +41,7 @@ class AuthController extends Controller
     
     public function signup(Request $request)
     {
-        try {
+        
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
@@ -50,16 +50,7 @@ class AuthController extends Controller
                 'email.unique' => 'This email is already registered. Please use another.',
                 'password.confirmed' => 'Password confirmation does not match.'
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // Log the incoming request and the validation errors
-            Log::error('Signup request failed validation', [
-                'request_data' => $request->all(),
-                'validation_errors' => $e->errors(),
-            ]);
-
-            // Rethrow the exception so Laravel still returns 422
-            throw $e;
-        }
+        
 
         $userData = User::create([
             'name' => $request->name,
