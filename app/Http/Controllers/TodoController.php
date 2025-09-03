@@ -14,7 +14,7 @@ class TodoController extends Controller
     public function index()
     {
         $todo = Todo::where('user_id', auth()->id())
-            ->select('id', 'title', 'creation_date', 'status')
+            ->select('id', 'title', 'creation_date', 'updated_date', 'status')
             ->get();
 
         return response()->json($todo);
@@ -37,6 +37,7 @@ class TodoController extends Controller
             'user_id' => auth()->id(),
             'title' => $request->input('title'),
             'creation_date' => $request->input('creation_date', now()),
+            'updated_date' => null, // ✅ leave empty
             'status' => $request->input('status', false),
         ]);
 
@@ -44,6 +45,7 @@ class TodoController extends Controller
             "id" => $todo->id,
             "title" => $todo->title,
             "creation_date" => $todo->creation_date,
+            "updated_date" => $todo->updated_date ?? '-', // ✅ show dash if null
             "status" => $todo->status,
         ])->setStatusCode(201, 'Todo created successfully');
     }
@@ -61,6 +63,7 @@ class TodoController extends Controller
             'id' => $todo->id,
             'title' => $todo->title,
             'creation_date' => $todo->creation_date,
+            'updated_date' => $todo->updated_date ?? '-',
             'status' => $todo->status,
         ])->setStatusCode(200, 'Todo retrieved successfully');
     }
@@ -87,6 +90,7 @@ class TodoController extends Controller
         $todo = Todo::find($id);
         $todo->title = $request->input('title', $todo->title);
         $todo->creation_date = $request->input('creation_date', $todo->creation_date);
+        $todo->updated_date = now();
         $todo->status = $request->input('status', $todo->status);
         $todo->save();
 
@@ -94,6 +98,7 @@ class TodoController extends Controller
             'id' => $todo->id,
             'title' => $todo->title,
             'creation_date' => $todo->creation_date,
+            'updated_date' => $todo->updated_date ?? '-',
             'status' => $todo->status,
         ])->setStatusCode(200, 'Todo updated successfully');
     }
